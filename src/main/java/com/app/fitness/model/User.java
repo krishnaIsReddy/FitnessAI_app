@@ -21,11 +21,4 @@ public class User {
     private String username;
     private int proteinGoal;
     private int calorieGoal;
-    private int carbGoal;
-    private int fatGoal;
-    private int height;
-    private int weight;
-    private String gender;
-    private int age;
-    private String activityLevel; //None, light, moderate, active
 }

@@ -1,6 +1,7 @@
 package com.app.fitness.controller;
 
 
+import com.app.fitness.dto.CalculateGoals;
 import com.app.fitness.dto.UpdatedGoalRequest;
 import com.app.fitness.model.Food;
 import com.app.fitness.model.NutritionRecord;
@@ -33,6 +34,7 @@ public class UserController {
     private UserService service;
 
     private UpdatedGoalRequest request;
+    private CalculateGoals goals;
 
     @Autowired
     private ObjectDetectionService detection;
@@ -64,6 +66,17 @@ public class UserController {
         return ResponseEntity.ok(service.updateGoals(userId, protein, calorie));
     }
 
+    @PutMapping("/users/{userId}/goals/update")
+    public ResponseEntity<String> calculateGoals(@PathVariable Integer userId,
+                                                 @RequestBody CalculateGoals goals){
+        int age = goals.getAge();
+        int height = goals.getHeight();
+        int weight = goals.getWeight();
+        String gender = goals.getGender();
+        String activity = goals.getActivity();
+
+        return ResponseEntity.ok(service.calculateGoals(userId, age, height, weight, gender, activity));
+    }
 
     @GetMapping("/users/{userId}")
     public ResponseEntity<Optional<User>> getUser(@PathVariable Integer userId){

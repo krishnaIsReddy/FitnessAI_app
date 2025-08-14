@@ -80,17 +80,22 @@ public class UserService {
         return userRepo.findById(userId);
     }
 
-    public void calculateGoals(Integer id, int height, int weight, int age, String activityLevel, String gender) {
+
+
+    public String calculateGoals(Integer id, int age, int height, int weight, String gender, String activity) {
         User user = userRepo.findById(id).orElseThrow();
 
         double bmr;
+        //double heightCm = height * 2.54;
+        //double weightKg = weight * 0.453592;
+
         if (gender.equals("male")) {
             bmr = 10 * weight + 6.25 * height - 5 * age + 5;
         }else{
             bmr = 10 * weight + 6.25 * height - 5 * age - 161;
         }
 
-        double multiplier = switch (activityLevel.toLowerCase()) {
+        double multiplier = switch (activity.toLowerCase()) {
             case "none" -> 1.2;
             case "light" -> 1.375;
             case "moderate" -> 1.55;
@@ -100,13 +105,16 @@ public class UserService {
 
         int dailyCalories = (int) Math.round(bmr * multiplier);
         int protein = (int) Math.round((dailyCalories * 0.30) / 4);
-        int carbs = (int) Math.round((dailyCalories * 0.40) / 4);
-        int fat = (int) Math.round((dailyCalories * 0.30) / 9);
+        //int carbs = (int) Math.round((dailyCalories * 0.40) / 4);
+        //int fat = (int) Math.round((dailyCalories * 0.30) / 9);
 
         user.setCalorieGoal(dailyCalories);
         user.setProteinGoal(protein);
-        user.setCarbGoal(carbs);
-        user.setFatGoal(fat);
+        userRepo.save(user);
+        //user.setCarbGoal(carbs);
+        //user.setFatGoal(fat);
+
+        return "Your goals have been successfully calculated and updated!";
     }
 
 
